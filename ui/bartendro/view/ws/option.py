@@ -8,7 +8,7 @@ from tempfile import mktemp
 from sqlalchemy import asc, func
 from bartendro import app, db, mixer
 from flask import Flask, request
-from flask.ext.login import login_required, logout_user
+from flask_login import login_required, logout_user
 from werkzeug.exceptions import InternalServerError, BadRequest
 from bartendro.model.option import Option
 from bartendro.options import bartendro_options
@@ -25,10 +25,10 @@ def ws_options():
             try:    
                 if isinstance(bartendro_options[o.key], int):
                    value = int(o.value)
-                elif isinstance(bartendro_options[o.key], unicode):
-                   value = unicode(o.value)
-                elif isinstance(bartendro_options[o.key], boolean):
-                   value = boolean(o.value)
+                elif isinstance(bartendro_options[o.key], str):
+                   value = str(o.value)
+                elif isinstance(bartendro_options[o.key], bool):
+                   value = bool(o.value)
                 else:
                     raise InternalServerError
             except KeyError:
@@ -88,8 +88,8 @@ def ws_upload():
 @login_required
 def ws_upload_confirm():
     file_name = request.json['file_name']
-    print file_name
-    print "Move file '%s' into place." % file_name
+    print(file_name)
+    print("Move file '%s' into place." % file_name)
 
     if not os.path.exists(DB_BACKUP_DIR):
         try:

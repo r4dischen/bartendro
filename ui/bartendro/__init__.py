@@ -2,8 +2,8 @@
 
 import os
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.login import LoginManager
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 from sqlalchemy.orm import mapper, relationship, backref
 
 SQLALCHEMY_DATABASE_FILE = 'bartendro.db'
@@ -18,6 +18,7 @@ app = Flask(__name__,
             static_url_path = STATIC_PATH,
             static_folder = os.path.join("..", STATIC_FOLDER),
             template_folder = os.path.join("..", TEMPLATE_FOLDER))
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config.from_object(__name__)
 db = SQLAlchemy(app)
 

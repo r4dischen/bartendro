@@ -91,10 +91,10 @@ def load_options():
         try:
             if isinstance(bartendro_options[o.key], int):
                value = int(o.value)
-            elif isinstance(bartendro_options[o.key], unicode):
-               value = unicode(o.value)
-            elif isinstance(bartendro_options[o.key], boolean):
-               value = boolean(o.value)
+            elif isinstance(bartendro_options[o.key], str):
+               value = str(o.value)
+            elif isinstance(bartendro_options[o.key], str):
+               value = str(o.value)
             else:
                 raise BadConfigOptionsError
         except KeyError:

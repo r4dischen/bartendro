@@ -6,7 +6,7 @@ from time import sleep
 from werkzeug.exceptions import BadRequest, InternalServerError
 from bartendro import app, db
 from flask import Flask, request, Response
-from flask.ext.login import login_required
+from flask_login import login_required
 
 log = logging.getLogger('bartendro')
 
@@ -103,7 +103,7 @@ def ws_liquidlevel_low_all_set():
     driver = app.driver
 
     data = []
-    for disp in xrange(driver.count()):
+    for disp in range(driver.count()):
         low = driver.get_liquid_level(disp)
         if low < 0: 
             log.error("Failed to read liquid level threshold from dispenser %d" % (disp + 1))
