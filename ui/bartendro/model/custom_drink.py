@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from bartendro import db
-from sqlalchemy import Column, Integer, UnicodeText, ForeignKey
+from sqlalchemy.orm import mapper, relationship
+from sqlalchemy import Table, Column, Integer, String, MetaData, UnicodeText, ForeignKey
+from sqlalchemy.ext.declarative import declarative_base
 
 
 class CustomDrink(db.Model):

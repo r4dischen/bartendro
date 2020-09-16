@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from wtforms import Form, StringField, HiddenField, validators, TextAreaField, SubmitField, BooleanField
+from wtforms import Form, StringField, DecimalField, HiddenField, validators, TextAreaField, SubmitField, BooleanField
 
 MAX_SUGGESTED_DRINK_SIZE = 5000  # in ml
 

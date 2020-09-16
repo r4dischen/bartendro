@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+import sys
+from time import sleep
+
 
 class GPIO(object):
     def __init__(self, pin):

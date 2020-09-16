@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from bartendro import db
-from sqlalchemy import Column, Integer, UnicodeText, UniqueConstraint, Index
+from sqlalchemy.orm import mapper, relationship
+from sqlalchemy import Table, Column, Integer, String, MetaData, Unicode, UnicodeText, UniqueConstraint, Text, Index
+from sqlalchemy.ext.declarative import declarative_base
 
 BOOZE_TYPE_UNKNOWN = 0
 BOOZE_TYPE_ALCOHOL = 1

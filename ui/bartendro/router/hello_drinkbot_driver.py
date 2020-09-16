@@ -1,15 +1,18 @@
+import sys
+import pdb
+import os
 import collections
 import logging
-import pdb
-import threading
-from struct import pack, unpack
+from subprocess import call
 from time import sleep, localtime, time
-
 import serial
-
-# import pack7
+from struct import pack, unpack
+#import pack7
 # import dispenser_select
 # from bartendro.error import SerialIOError
+import random
+
+import threading
 
 # try:
 #    from Adafruit_MotorHAT import Adafruit_MotorHAT, Adafruit_DCMotor

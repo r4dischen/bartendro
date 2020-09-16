@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from bartendro import app, db
-from flask import render_template
+from flask import Flask, request, render_template
 from flask import Response
 import json
 from bartendro.model.drink import Drink

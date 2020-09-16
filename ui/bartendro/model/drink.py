@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from operator import attrgetter
-
 from bartendro import db
+from sqlalchemy.orm import mapper, relationship
+from sqlalchemy import Table, Column, Integer, String, MetaData, UnicodeText, ForeignKey, Boolean
+from sqlalchemy.ext.declarative import declarative_base
 from bartendro.model.drink_name import DrinkName
-from sqlalchemy import Column, Integer, UnicodeText, ForeignKey, Boolean
+from operator import attrgetter
 
 DEFAULT_SUGGESTED_DRINK_SIZE = 118  # ml (4 oz)
 

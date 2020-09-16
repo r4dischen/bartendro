@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from wtforms import Form, StringField, PasswordField, SubmitField, validators
+from wtforms import Form, StringField, PasswordField, SubmitField, SelectField, validators
 
 
 class LoginForm(Form):

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from wtforms import Form, SubmitField
+from wtforms import Form, SelectField, SubmitField
 
 
 class DispenserForm(Form):
