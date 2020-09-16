@@ -7,16 +7,16 @@ from subprocess import call
 from time import sleep, localtime, time
 import serial
 from struct import pack, unpack
-import pack7
-#import dispenser_select
-#from bartendro.error import SerialIOError
+#import pack7
+# import dispenser_select
+# from bartendro.error import SerialIOError
 import random
 
 import threading
 
-#try:
+# try:
 #    from Adafruit_MotorHAT import Adafruit_MotorHAT, Adafruit_DCMotor
-#except:
+# except:
 #    pass
 
 # import atext
@@ -71,9 +71,6 @@ PACKET_COMM_TEST = 0xFE
 
 DEST_BROADCAST = 0xFF
 
-MOTOR_DIRECTION_FORWARD = 1
-MOTOR_DIRECTION_BACKWARD = 0
-
 LED_PATTERN_IDLE = 0
 LED_PATTERN_DISPENSE = 1
 LED_PATTERN_DRINK_DONE = 2
@@ -88,7 +85,8 @@ log = logging.getLogger('bartendro')
 
 # todo: put this in a start() method
 try:
-    from Adafruit_MotorHAT import Adafruit_MotorHAT, Adafruit_DCMotor
+    from Raspi_MotorHAT import Raspi_MotorHAT, Raspi_DCMotor
+
     pass
 
 except:
@@ -99,17 +97,19 @@ except:
         BRAKE = 3
         RELEASE = 4
 
+
     log.info('no motor hat')
 
 
 def crc16_update(crc, a):
     crc ^= a
-    for i in xrange(0, 8):
+    for i in range(0, 8):
         if crc & 1:
             crc = (crc >> 1) ^ 0xA001
         else:
             crc = (crc >> 1)
     return crc
+
 
 class Fake_Motor():
     def __init__(self, num):
@@ -121,6 +121,7 @@ class Fake_Motor():
     def run(self, command=None):
         log.info('run fake motor %s' % self.num)
 
+
 class Fake_MotorHAT():
 
     def __init__(self):
@@ -128,9 +129,7 @@ class Fake_MotorHAT():
         self.motors = [Fake_Motor(i) for i in range(9)]
 
     def getMotor(self, num):
-
         return self.motors[num]
-
 
 
 class RouterDriver(object):
@@ -138,7 +137,7 @@ class RouterDriver(object):
     peristlatic pumps from Hello Drinkbot project. Provides a layer above
     the AdaFruit motor library which understands pumps'''
 
-    def __init__(self, device,  software_only=False):
+    def __init__(self, device, software_only=False):
         ''' device is ignored, it is required for bartendro hardware'''
         self.device = device
         self.__doc__ = 'foo'
@@ -149,20 +148,20 @@ class RouterDriver(object):
         self.startup_log = ""
 
         # I need a hellodrinkbot switch
-        #if not software_only:
+        # if not software_only:
 
         if 1:
             try:
-                self.mh1 = Adafruit_MotorHAT(addr=0x60)
-                #self.ports = [self.mh1.getMotor(foo+1) for foo in range(4)]
-                #for motor in range(4):
-                    #self.ports[motor].setSpeed(255)
+                self.mh1 = Raspi_MotorHAT(addr=0x6f)
+                # self.ports = [self.mh1.getMotor(foo+1) for foo in range(4)]
+                # for motor in range(4):
+                # self.ports[motor].setSpeed(255)
             except:
                 # no motor hat, but that might be fine
                 self.mh1 = Fake_MotorHAT()
                 log.info("No Motor Hat?")
 
-            self.ports = [self.mh1.getMotor(foo+1) for foo in range(4)]
+            self.ports = [self.mh1.getMotor(foo + 1) for foo in range(4)]
             for motor in range(4):
                 self.ports[motor].setSpeed(255)
 
@@ -176,12 +175,12 @@ class RouterDriver(object):
             #    self.ports[motor].setSpeed(255)
 
         else:
-            #self.ports = [i for i in range(1, 5)]
+            # self.ports = [i for i in range(1, 5)]
             pass
 
         self.num_dispensers = MAX_DISPENSERS
         self.dispensers = [
-            #{'port': None, 'direction': MOTOR_DIRECTION_FORWARD},
+            # {'port': None, 'direction': MOTOR_DIRECTION_FORWARD},
             {'port': 0, 'direction': MOTOR_DIRECTION_FORWARD},
             {'port': 0, 'direction': MOTOR_DIRECTION_BACKWARD},
             {'port': 1, 'direction': MOTOR_DIRECTION_FORWARD},
@@ -192,7 +191,6 @@ class RouterDriver(object):
             {'port': 3, 'direction': MOTOR_DIRECTION_BACKWARD},
         ]
 
-     
     def get_startup_log(self):
         return self.startup_log
 
@@ -229,9 +227,9 @@ class RouterDriver(object):
                                      parity=serial.PARITY_NONE,
                                      stopbits=serial.STOPBITS_ONE,
                                      timeout=.01)
-        except serial.serialutil.SerialException, e:
-            #raise SerialIOError(e)
-	    pass
+        except serial.serialutil.SerialException as e:
+            # raise SerialIOError(e)
+            pass
 
         log.info("Done.\n")
 
@@ -239,10 +237,10 @@ class RouterDriver(object):
         self.status = status_led.StatusLED(self.software_only)
         self.status.set_color(0, 0, 1)
 
-        #self.dispenser_select = dispenser_select.DispenserSelect(
+        # self.dispenser_select = dispenser_select.DispenserSelect(
         #    MAX_DISPENSERS, self.software_only)
-        #self.dispenser_select.open()
-        #self.dispenser_select.reset()
+        # self.dispenser_select.open()
+        # self.dispenser_select.reset()
 
         # This primes the communication line.
         self.ser.write(chr(170) + chr(170) + chr(170))
@@ -250,9 +248,9 @@ class RouterDriver(object):
 
         log.info("Discovering dispensers")
         self.num_dispensers = 0
-        for port in xrange(MAX_DISPENSERS):
+        for port in range(MAX_DISPENSERS):
             self._log_startup("port %d:" % port)
-            #self.dispenser_select.select(port)
+            # self.dispenser_select.select(port)
             sleep(.01)
             while True:
                 self.ser.flushInput()
@@ -357,14 +355,14 @@ class RouterDriver(object):
     def dispenser_port(self, disp):
         """ Take a dispenser, return the port """
 
-        port = disp/2
-	print('disp: %i port: %i' % (disp, port))
- 	#pdb.set_trace()
+        port = disp // 2
+        print('disp: %i port: %i' % (disp, port))
+        # pdb.set_trace()
         return port
 
     def dispenser_sibling(self, disp):
         if (disp % 2):
-    	    sibling = disp - 1
+            sibling = disp - 1
         else:
             sibling = disp + 1
         return sibling
@@ -372,23 +370,23 @@ class RouterDriver(object):
     def stop(self, dispenser=None):
         """ turn one or all dispensers off """
         log.info('\tdispenser_off  %r ' %
-                 ( dispenser))
-        #if self.software_only:
-            #return True
+                 (dispenser))
+        # if self.software_only:
+        # return True
         # if dispenser==None turn them all off
         if not dispenser:
-	    log.info('\tstop no dispenser passed, turn off all')
+            log.info('\tstop no dispenser passed, turn off all')
 
-            #for disp in (range(1, 4)):
+            # for disp in (range(1, 4)):
             for disp in (range(9)):
-                #self.ports[disp]['timer'] = None
-		try:
-	  	    self.ports[disp].run(Adafruit_MotorHAT.RELEASE)
+                # self.ports[disp]['timer'] = None
+                try:
+                    self.ports[disp].run(Adafruit_MotorHAT.RELEASE)
                 except:
-		    pass
+                    pass
         else:
-	    log.info('\tstop dispenser %r' % dispenser)
-            #self.ports[dispenser]['timer'] = None
+            log.info('\tstop dispenser %r' % dispenser)
+            # self.ports[dispenser]['timer'] = None
 
             port = self.dispenser_port(dispenser)
             self.ports[port].run(Adafruit_MotorHAT.RELEASE)
@@ -406,9 +404,9 @@ class RouterDriver(object):
         except:
             pass
 
-	print('dispenser: %i ' % dispenser)
+        print('dispenser: %i ' % dispenser)
         port = self.dispenser_port(dispenser)
-	sibling = self.dispenser_sibling(dispenser)
+        sibling = self.dispenser_sibling(dispenser)
 
         try:
             if self.dispensers[sibling]['timer'].isAlive():
@@ -422,17 +420,17 @@ class RouterDriver(object):
             pass
 
         if (dispenser % 2):
-	    self.ports[port].run(Adafruit_MotorHAT.BACKWARD)
+            self.ports[port].run(Adafruit_MotorHAT.BACKWARD)
         else:
-	    self.ports[port].run(Adafruit_MotorHAT.FORWARD)
+            self.ports[port].run(Adafruit_MotorHAT.FORWARD)
 
-        #if not self.software_only:
+        # if not self.software_only:
         #    if (dispenser % 2):
         #        self.ports[dispenser].run(Adafruit_MotorHAT.FORWARD)
         #    else:
         #        self.ports[dispenser].run(Adafruit_MotorHAT.BACKWARD)
 
-	log.info('setting stop callback to dispenser: %r ' % dispenser)
+        log.info('setting stop callback to dispenser: %r ' % dispenser)
         self.dispensers[dispenser]['timer'] = threading.Timer(
             duration, self.stop, [dispenser])
         self.dispensers[dispenser]['timer'].start()
@@ -442,9 +440,9 @@ class RouterDriver(object):
     def dispense_ml(self, dispenser, ml, speed=255):
         if self.software_only:
             pass
-        SECONDS_PER_ML = 18/100. # huh? 
-        time = ml*SECONDS_PER_ML
-        ret = self.dispense_time(dispenser,time)
+        SECONDS_PER_ML = 18 / 100.  # huh?
+        time = ml * SECONDS_PER_ML
+        ret = self.dispense_time(dispenser, time)
         return ret
 
     def dispense_ticks(self, dispenser, ticks, speed=255):
@@ -685,7 +683,7 @@ class RouterDriver(object):
                 log.error("*** dispenser: %d, type: %d" %
                           (dest + 1, ord(packet[1:2])))
                 return False
-        except SerialException, err:
+        except SerialException as err:
             log.error("SerialException: %s" % err)
             return False
 
@@ -846,7 +844,6 @@ class RouterDriver(object):
 
 
 if __name__ == '__main__':
-
     # timer_test()
     log.info("in main")
     pump = RouterDriver('', True)
@@ -859,12 +856,10 @@ if __name__ == '__main__':
     # Pump 7=Port 3 FORWARD
     # Pump 8=Port 3 BACKWARD
 
-
     # pump.ports[3].run(Adafruit_MotorHAT.FORWARD)
     # pump.ports[3].run(Adafruit_MotorHAT.BACKWARD)
     # pump.ports[3].run(Adafruit_MotorHAT.RELEASE)
     pdb.set_trace()
-
 
     # todo: why doesn't this work?
     pump.dispense_time(0, 1)

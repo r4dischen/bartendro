@@ -18,6 +18,7 @@ app = Flask(__name__,
             static_url_path = STATIC_PATH,
             static_folder = os.path.join("..", STATIC_FOLDER),
             template_folder = os.path.join("..", TEMPLATE_FOLDER))
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config.from_object(__name__)
 db = SQLAlchemy(app)
 

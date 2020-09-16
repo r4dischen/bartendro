@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 import socket
-import fcntl
+#import fcntl
 import struct
 import time
 import os
 from bartendro import app
 from flask import Flask, request, render_template, Response
 from werkzeug.exceptions import Unauthorized
-from flask.ext.login import login_required
+from flask_login import login_required
 from bartendro.model.version import DatabaseVersion
 
 def get_ip_address_from_interface(ifname):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
-        return socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915,  
+        return socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915,
                                 struct.pack('256s', ifname[:15]))[20:24])
     except IOError:
         return "[none]"

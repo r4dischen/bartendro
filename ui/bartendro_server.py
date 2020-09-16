@@ -17,15 +17,15 @@ from bartendro import mixer
 from bartendro.error import BartendroBrokenError, SerialIOError
 from bartendro.options import load_options
 
-if os.path.exists("version.txt"):
-    with open("version.txt", "r") as f:
-        version = f.read()
-else:
-    version = subprocess.check_output(["git", "rev-parse", "HEAD"])
-    if version:
-        version = "git commit " + version[:10]
-    else:
-        version = "[unknown]"
+# if os.path.exists("version.txt"):
+#     with open("version.txt", "r") as f:
+#         version = f.read()
+# else:
+#     version = subprocess.check_output(["git", "rev-parse", "HEAD"])
+#     if version:
+#         version = "git commit " + version[:10]
+#     else:
+#         version = "[unknown]"
 
 LOG_SIZE = 1024 * 500  # 500k maximum log file size
 LOG_FILES_SAVED = 3    # number of log files to compress and save
@@ -35,7 +35,7 @@ parser = argparse.ArgumentParser(description='Bartendro application process')
 parser.add_argument("-d", "--debug", help="Turn on debugging mode to see stack traces in the error log", default=True, action='store_true')
 parser.add_argument("-t", "--host", help="Which interfaces to listen on. Default: 127.0.0.1", default="127.0.0.1", type=str)
 parser.add_argument("-p", "--port", help="Which port to listen on. Default: 8080", default="8080", type=int)
-parser.add_argument("-s", "--software-only", help="Run only the server software, without hardware interaction.", default=False, action='store_true')
+parser.add_argument("-s", "--software-only", help="Run only the server software, without hardware interaction.", default=True, action='store_true')
 
 args = parser.parse_args()
 
@@ -45,16 +45,7 @@ try:
 except ImportError:
     have_uwsgi = False
 
-def print_software_only_notice():
-    print """If you're trying to run this code without having Bartendro hardware,
-you can still run the software portion of it in a simulation mode. In this mode no 
-communication with the Bartendro hardware will happen to allow the software to run.
-To enable this mode, set the BARTENDRO_SOFTWARE_ONLY environment variable to 1 and 
-try again:
 
-    > export BARTENDRO_SOFTWARE_ONLY=1
-
-"""
 
 # Set up logging
 if not os.path.exists("logs"):
@@ -75,8 +66,8 @@ except KeyError:
     app.software_only = 0
 
 if not os.path.exists("bartendro.db"):
-    print "bartendro.db file not found. Please copy bartendro.db.default to "
-    print "bartendro.db in order to provide Bartendro with a starting database."
+    print("bartendro.db file not found. Please copy bartendro.db.default to ")
+    print("bartendro.db in order to provide Bartendro with a starting database.")
     sys.exit(-1)
 
 # Create a memcache connection and flush everything
@@ -97,9 +88,7 @@ except BartendroBrokenError:
     if have_uwsgi:
         startup_err = err
     else:
-        print
-        print err
-        print
+        print(err)
         print_software_only_notice()
         sys.exit(-1)
 except SerialIOError:
@@ -107,9 +96,7 @@ except SerialIOError:
     if have_uwsgi:
         startup_err = err
     else:
-        print
-        print err
-        print
+        print(err)
         print_software_only_notice()
         sys.exit(-1)
 except:
@@ -118,7 +105,7 @@ except:
         startup_err = err
     else:
         print
-        print err
+        print(err)
         print
         print_software_only_notice()
         sys.exit(-1)
@@ -135,7 +122,7 @@ else:
 
     logging.info("Bartendro started")
     app.debug = args.debug
-    app.version = version
+    #app.version = version
 
 if __name__ == '__main__':
     app.run(host=args.host, port=args.port)

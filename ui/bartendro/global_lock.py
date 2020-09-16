@@ -73,7 +73,7 @@ class BartendroGlobalLock(object):
         #state = uwsgi.sharedarea_readbyte(1)
         #uwsgi.unlock()
 
-        return state
+        return self.state
 
     def set_state(self, state):
         """Set the current state of Bartendro"""
