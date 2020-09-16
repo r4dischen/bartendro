@@ -1,21 +1,19 @@
 #!/usr/bin/env python
 
-from bartendro import app
-import logging
+import argparse
 import logging.handlers
 import os
-import memcache
 import sys
-import argparse
-import subprocess
 import traceback
 
-from bartendro.global_lock import BartendroGlobalLock
-#from bartendro.router import driver
-from bartendro.router import hello_drinkbot_driver as driver
+import memcache
+from bartendro import app
 from bartendro import mixer
 from bartendro.error import BartendroBrokenError, SerialIOError
+from bartendro.global_lock import BartendroGlobalLock
 from bartendro.options import load_options
+# from bartendro.router import driver
+from bartendro.router import hello_drinkbot_driver as driver
 
 # if os.path.exists("version.txt"):
 #     with open("version.txt", "r") as f:

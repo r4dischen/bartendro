@@ -8,12 +8,14 @@ from bartendro.model.booze import Booze
 from bartendro.model.booze_group import BoozeGroup
 from bartendro.form.booze import BoozeForm
 
+
 @app.route('/admin/booze')
 @login_required
 def admin_booze():
     form = BoozeForm(request.form)
     boozes = Booze.query.order_by(asc(func.lower(Booze.name)))
     return render_template("admin/booze", options=app.options, boozes=boozes, form=form, title="Booze")
+
 
 @app.route('/admin/booze/edit/<id>')
 @login_required
@@ -22,12 +24,13 @@ def admin_booze_edit(id):
     booze = Booze.query.filter_by(id=int(id)).first()
     form = BoozeForm(obj=booze)
     boozes = Booze.query.order_by(asc(func.lower(Booze.name)))
-    return render_template("admin/booze", options=app.options, booze=booze, boozes=boozes, form=form, title="Booze", saved=saved)
+    return render_template("admin/booze", options=app.options, booze=booze, boozes=boozes, form=form, title="Booze",
+                           saved=saved)
+
 
 @app.route('/admin/booze/save', methods=['POST'])
 @login_required
 def admin_booze_save():
-
     cancel = request.form.get("cancel")
     if cancel: return redirect('/admin/booze')
 

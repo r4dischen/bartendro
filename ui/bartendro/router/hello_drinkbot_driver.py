@@ -520,7 +520,7 @@ class RouterDriver(object):
         """
 
         if self.software_only:
-            return (False, False)
+            return False, False
 
         # Sometimes the motors can interfere with communications.
         # In such cases, assume the motor is still running and
@@ -531,10 +531,10 @@ class RouterDriver(object):
         if ret:
             ack, value0, value1 = self._receive_packet8_2()
             if ack == PACKET_ACK_OK:
-                return (value0, value1)
+                return value0, value1
             if ack == PACKET_ACK_TIMEOUT:
-                return (-1, -1)
-        return (True, False)
+                return -1, -1
+        return True, False
 
     def update_liquid_levels(self):
         if self.software_only:
@@ -560,8 +560,8 @@ class RouterDriver(object):
         if self._send_packet8(dispenser, PACKET_GET_LIQUID_THRESHOLDS, 0):
             ack, low, out = self._receive_packet16()
             if ack == PACKET_ACK_OK:
-                return (low, out)
-        return (-1, -1)
+                return low, out
+        return -1, -1
 
     def set_liquid_level_thresholds(self, dispenser, low, out):
         if self.software_only:
@@ -763,9 +763,9 @@ class RouterDriver(object):
             if len(ch) < 1:
                 if not quiet:
                     log.error("receive packet: response timeout")
-                return (PACKET_ACK_TIMEOUT, "")
+                return PACKET_ACK_TIMEOUT, ""
 
-            if (ord(ch) == 0xFF):
+            if ord(ch) == 0xFF:
                 header += 1
             else:
                 header = 0
@@ -807,33 +807,33 @@ class RouterDriver(object):
             ack = PACKET_ACK_TIMEOUT
 
         if ack == PACKET_ACK_OK:
-            return (ack, packet)
+            return ack, packet
         else:
-            return (ack, "")
+            return ack, ""
 
     def _receive_packet8(self, quiet=False):
         ack, packet = self._receive_packet(quiet)
         if ack == PACKET_ACK_OK:
             data = unpack("BBBBBB", packet)
-            return (ack, data[2])
+            return ack, data[2]
         else:
-            return (ack, 0)
+            return ack, 0
 
     def _receive_packet8_2(self, quiet=False):
         ack, packet = self._receive_packet(quiet)
         if ack == PACKET_ACK_OK:
             data = unpack("BBBBBB", packet)
-            return (ack, data[2], data[3])
+            return ack, data[2], data[3]
         else:
-            return (ack, 0, 0)
+            return ack, 0, 0
 
     def _receive_packet16(self, quiet=False):
         ack, packet = self._receive_packet(quiet)
         if ack == PACKET_ACK_OK:
             data = unpack("<BBHH", packet)
-            return (ack, data[2], data[3])
+            return ack, data[2], data[3]
         else:
-            return (ack, 0, 0)
+            return ack, 0, 0
 
     def _clear_startup_log(self):
         self.startup_log = ""

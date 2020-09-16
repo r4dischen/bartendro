@@ -14,6 +14,7 @@ from operator import itemgetter
 from bartendro import fsm
 from bartendro.mixer import LL_OK
 
+
 @app.route('/admin')
 @login_required
 def dispenser():
@@ -41,9 +42,9 @@ def dispenser():
     for i in range(1, 17):
         dis = "dispenser%d" % i
         actual = "actual%d" % i
-        setattr(F, dis, SelectField("%d" % i, choices=sorted_booze_list)) 
+        setattr(F, dis, SelectField("%d" % i, choices=sorted_booze_list))
         setattr(F, actual, IntegerField(actual, [validators.NumberRange(min=1, max=100)]))
-        kwargs[dis] = "1" # string of selected booze
+        kwargs[dis] = "1"  # string of selected booze
         fields.append((dis, actual))
 
     form = F(**kwargs)
@@ -70,11 +71,11 @@ def dispenser():
         state = "Bartendro is in bad state: %d" % bstate
 
     avail_drinks = app.mixer.get_available_drink_list()
-    return render_template("admin/dispenser", 
+    return render_template("admin/dispenser",
                            title="Dispensers",
-                           calibrate_ml=CALIBRATE_ML, 
-                           form=form, count=count, 
-                           fields=fields, 
+                           calibrate_ml=CALIBRATE_ML,
+                           form=form, count=count,
+                           fields=fields,
                            saved=saved,
                            state=state,
                            error=error,
@@ -83,6 +84,7 @@ def dispenser():
                            options=app.options,
                            dispenser_version=driver.dispenser_version,
                            states=states)
+
 
 @app.route('/admin/save', methods=['POST'])
 @login_required
@@ -96,7 +98,7 @@ def save():
         for dispenser in dispensers:
             try:
                 dispenser.booze_id = request.form['dispenser%d' % dispenser.id]
-                #dispenser.actual = request.form['actual%d' % dispenser.id]
+                # dispenser.actual = request.form['actual%d' % dispenser.id]
             except KeyError:
                 continue
         db.session.commit()

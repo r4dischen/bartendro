@@ -99,7 +99,7 @@ class Mixer(object):
         r.data = recipe
         r.drink = drink
         self.recipe = r
-        log.info("make_drink drink: %r reciple: %r " % (drink, recipe))
+        log.info("make_drink drink: %r recipe: %r " % (drink, recipe))
         with BartendroLock(app.globals):
             self.do_event(fsm.EVENT_MAKE_DRINK)
             if drink and drink.id:
@@ -120,7 +120,7 @@ class Mixer(object):
             for t_state, t_event, t_next_state in fsm.transition_table:
                 if t_state == cur_state and event == t_event:
                     next_state = t_next_state
-                    log.info("do_event next_state: %r  " % (next_state))
+                    log.info("do_event next_state: %r  " % next_state)
                     break
 
             if not next_state:
@@ -349,7 +349,7 @@ class Mixer(object):
 
     def _state_test_dispense(self):
 
-        booze_id = self.recipe.data.keys()[0]
+        booze_id = list(self.recipe.data.keys())[0]
         ml = self.recipe.data[booze_id]
 
         recipe = {}
@@ -565,7 +565,7 @@ class Mixer(object):
             if not self.driver.dispense_ml(disp, ticks, speed):
                 raise BartendroBrokenError(
                     "Dispense error. Dispense %d ml, speed %d on dispenser %d failed." % (
-                    recipe[disp], speed, disp + 1))
+                        recipe[disp], speed, disp + 1))
 
             active_disp.append(disp)
             sleep(.01)

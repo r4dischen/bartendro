@@ -12,15 +12,18 @@ from bartendro.model.booze_group import BoozeGroup
 from bartendro.model.booze_group_booze import BoozeGroupBooze
 from bartendro.model.drink_name import DrinkName
 from bartendro.model.dispenser import Dispenser
-from bartendro import constant 
+from bartendro import constant
+
 
 @app.route('/drink/<int:id>')
 def normal_drink(id):
     return drink(id, 0)
 
+
 @app.route('/drink/<int:id>/go')
 def lucky_drink(id):
     return drink(id, 1)
+
 
 def drink(id, go):
     """If go is True, tell the web page to pour the drink right away. No dallying!"""
@@ -29,25 +32,25 @@ def drink(id, go):
     can_make = id in app.mixer.get_available_drink_list()
 
     drink = db.session.query(Drink) \
-                          .filter(Drink.id == id) \
-                          .first() 
+        .filter(Drink.id == id) \
+        .first()
 
     boozes = db.session.query(Booze) \
-                          .join(DrinkBooze.booze) \
-                          .filter(DrinkBooze.drink_id == drink.id)
+        .join(DrinkBooze.booze) \
+        .filter(DrinkBooze.drink_id == drink.id)
 
     custom_drink = db.session.query(CustomDrink) \
-                          .filter(drink.id == CustomDrink.drink_id) \
-                          .first()
+        .filter(drink.id == CustomDrink.drink_id) \
+        .first()
     drink.process_ingredients()
 
     has_non_alcohol = False
     has_alcohol = False
     has_sweet = False
     has_tart = False
-    show_sobriety = 0 #drink.id == 46
+    show_sobriety = 0  # drink.id == 46
     for booze in boozes:
-        if booze.type == BOOZE_TYPE_ALCOHOL: 
+        if booze.type == BOOZE_TYPE_ALCOHOL:
             has_alcohol = True
         else:
             has_non_alcohol = True
@@ -58,8 +61,8 @@ def drink(id, go):
     show_strength = has_alcohol and has_non_alcohol
 
     if not custom_drink:
-        return render_template("drink/index", 
-                               drink=drink, 
+        return render_template("drink/index",
+                               drink=drink,
                                options=app.options,
                                title=drink.name.name,
                                is_custom=0,
@@ -75,10 +78,10 @@ def drink(id, go):
         disp_boozes[dispenser.booze_id] = 1
 
     booze_group = db.session.query(BoozeGroup) \
-                          .join(DrinkBooze, DrinkBooze.booze_id == BoozeGroup.abstract_booze_id) \
-                          .join(BoozeGroupBooze) \
-                          .filter(Drink.id == id) \
-                          .first()
+        .join(DrinkBooze, DrinkBooze.booze_id == BoozeGroup.abstract_booze_id) \
+        .join(BoozeGroupBooze) \
+        .filter(Drink.id == id) \
+        .first()
 
     filtered = []
     for bgb in booze_group.booze_group_boozes:
@@ -88,9 +91,9 @@ def drink(id, go):
         except KeyError:
             pass
 
-    booze_group.booze_group_boozes = sorted(filtered, key=lambda booze: booze.sequence ) 
-    return render_template("drink/index", 
-                           drink=drink, 
+    booze_group.booze_group_boozes = sorted(filtered, key=lambda booze: booze.sequence)
+    return render_template("drink/index",
+                           drink=drink,
                            options=app.options,
                            title=drink.name.name,
                            is_custom=1,
@@ -103,22 +106,24 @@ def drink(id, go):
                            go=go,
                            can_make=can_make)
 
+
 @app.route('/drink/sobriety')
 def drink_sobriety():
     return render_template("drink/sobriety")
 
+
 @app.route('/drink/all')
 def drink_all():
-    data = [{'id':d.id, 'name':d.name.name, 'description':d.desc} for d in Drink.query.all()]
+    data = [{'id': d.id, 'name': d.name.name, 'description': d.desc} for d in Drink.query.all()]
     js = json.dumps(data)
     resp = Response(js, status=200, mimetype='application/json')
     return resp
+
 
 @app.route('/drink/available')
 def drink_available():
     available = app.mixer.get_available_drink_list()
-    data = [{'id':d.id, 'name':d.name.name, 'description':d.desc} for d in Drink.query.all() if d.id in available]
+    data = [{'id': d.id, 'name': d.name.name, 'description': d.desc} for d in Drink.query.all() if d.id in available]
     js = json.dumps(data)
     resp = Response(js, status=200, mimetype='application/json')
     return resp
-

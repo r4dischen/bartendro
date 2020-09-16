@@ -15,23 +15,22 @@ STATIC_FOLDER = "content/static"
 TEMPLATE_FOLDER = "content/templates"
 
 app = Flask(__name__,
-            static_url_path = STATIC_PATH,
-            static_folder = os.path.join("..", STATIC_FOLDER),
-            template_folder = os.path.join("..", TEMPLATE_FOLDER))
+            static_url_path=STATIC_PATH,
+            static_folder=os.path.join("..", STATIC_FOLDER),
+            template_folder=os.path.join("..", TEMPLATE_FOLDER))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config.from_object(__name__)
 db = SQLAlchemy(app)
 
 login_manager = LoginManager()
 login_manager.login_view = "/admin/login"
-login_manager.setup_app(app)
+login_manager.init_app(app)
 
 # Import models
 from bartendro.model.drink import Drink
 from bartendro.model.custom_drink import CustomDrink
 from bartendro.model.drink_name import DrinkName
 from bartendro.model.drink_booze import DrinkBooze
-
 
 from bartendro.model.booze import Booze
 from bartendro.model.booze_group import BoozeGroup
@@ -50,7 +49,7 @@ Drink.drink_boozes = relationship(DrinkBooze, backref=backref("drink"))
 DrinkBooze.booze = relationship(Booze, backref=backref("drink_booze"))
 
 # This is the proper relationship from above.
-#DrinkBooze.drink= relationship(Drink, backref=backref("drink_booze"))
+# DrinkBooze.drink= relationship(Drink, backref=backref("drink_booze"))
 
 Dispenser.booze = relationship(Booze, backref=backref("dispenser"))
 BoozeGroup.abstract_booze = relationship(Booze, backref=backref("booze_group"))
@@ -66,13 +65,14 @@ from bartendro.view import root, trending
 from bartendro.view import booze
 from bartendro.view import snooze
 from bartendro.view.admin import booze as booze_admin, drink as drink_admin, \
-                                 dispenser as admin_dispenser, report, liquidlevel, user, options, debug
+    dispenser as admin_dispenser, report, liquidlevel, user, options, debug
 from bartendro.view.drink import drink
 from bartendro.view.ws import booze as ws_booze, dispenser as ws_dispenser, drink as ws_drink, \
-                              misc as ws_misc, liquidlevel, option as ws_options
+    misc as ws_misc, liquidlevel, option as ws_options
+
 
 @app.before_request
 def before_request(exception=None):
     if not app.startup_err or request.path.startswith("/static"):
         return
-    return render_template("startup_error", startup_err = app.startup_err)
+    return render_template("startup_error", startup_err=app.startup_err)

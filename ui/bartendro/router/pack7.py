@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-bits = [''.join(['01'[i&(1<<b)>0] for b in range(7,-1,-1)]) for i in range(256)]
+bits = [''.join(['01'[i & (1 << b) > 0] for b in range(7, -1, -1)]) for i in range(256)]
+
 
 def pack_7bit(data):
     buffer = 0
@@ -22,6 +23,7 @@ def pack_7bit(data):
     out += chr(buffer << (7 - bitcount))
     return out
 
+
 def unpack_7bit(data):
     buffer = 0
     bitcount = 0
@@ -42,4 +44,3 @@ def unpack_7bit(data):
         if len(data) == 0: break
 
     return out
-

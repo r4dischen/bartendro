@@ -4,17 +4,18 @@ from time import sleep, time
 from threading import Thread
 from bartendro import db, app
 from bartendro.error import BartendroBrokenError
-#from bartendro.router.driver import MOTOR_DIRECTION_FORWARD
+# from bartendro.router.driver import MOTOR_DIRECTION_FORWARD
 from bartendro.router.hello_drinkbot_driver import MOTOR_DIRECTION_FORWARD
 
-CLEAN_DURATION = 10 # seconds
+CLEAN_DURATION = 10  # seconds
 
 log = logging.getLogger('bartendro')
+
 
 class CleanCycle(object):
     left_set = [4, 5, 6, 7, 8, 9, 10]
     right_set = [0, 1, 2, 3, 11, 12, 13, 14]
-    STAGGER_DELAY = .150 # ms
+    STAGGER_DELAY = .150  # ms
 
     def __init__(self, mixer, mode):
         self.mixer = mixer
@@ -32,12 +33,12 @@ class CleanCycle(object):
             else:
                 disp_list.extend(self.left_set)
         else:
-            for d in xrange(self.mixer.disp_count):
+            for d in range(self.mixer.disp_count):
                 disp_list.append(d)
 
         self.mixer.driver.led_clean()
         for disp in disp_list:
-            self.mixer.driver.set_motor_direction(disp, MOTOR_DIRECTION_FORWARD);
+            self.mixer.driver.set_motor_direction(disp, MOTOR_DIRECTION_FORWARD)
             self.mixer.driver.start(disp)
             sleep(self.STAGGER_DELAY)
 
@@ -54,4 +55,4 @@ class CleanCycle(object):
         try:
             self.mixer.check_levels()
         except BartendroBrokenError as msg:
-            log.error("Post clean: %s" % msg) 
+            log.error("Post clean: %s" % msg)

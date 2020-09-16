@@ -10,12 +10,13 @@ BOOZE_TYPE_TART = 2
 BOOZE_TYPE_SWEET = 3
 BOOZE_TYPE_EXTERNAL = 4
 booze_types = [
-               (0, "Unknown"),
-               (1, "Alcohol"),
-               (2, "Tart"),
-               (3, "Sweet"),
-               (4, "External")
-              ]
+    (0, "Unknown"),
+    (1, "Alcohol"),
+    (2, "Tart"),
+    (3, "Sweet"),
+    (4, "External")
+]
+
 
 class Booze(db.Model):
     """
@@ -33,10 +34,11 @@ class Booze(db.Model):
 
     # add unique constraint for name
     UniqueConstraint('name', name='booze_name_undx')
- 
+
     query = db.session.query_property()
-    def __init__(self, name = u'', brand = u'', desc = u'', abv = 0, type = 0, out = 0, image=None, data = None):
-        if data: 
+
+    def __init__(self, name=u'', brand=u'', desc=u'', abv=0, type=0, out=0, image=None, data=None):
+        if data:
             self.update(data)
             return
         self.name = name
@@ -60,5 +62,6 @@ class Booze(db.Model):
 
     def __repr__(self):
         return "<Booze('%s','%s')>" % (self.id, self.name)
+
 
 Index('booze_name_ndx', Booze.name)

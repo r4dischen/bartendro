@@ -1,0 +1,2 @@
+1. Downlaod Raspi_MotorHAT
+2. pip install werkzeug Flask Flask-Login Flask-SQLAlchemy wtforms pyserial python-memcached pycopy-fcntl
