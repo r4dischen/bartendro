@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
-import memcache
-import random
-from sqlalchemy import func, asc
-from sqlalchemy.exc import OperationalError
 from bartendro import app, db
-from flask import Flask, request, render_template, redirect
+from bartendro import fsm
+from bartendro.mixer import LL_LOW, LL_OK
 from bartendro.model.dispenser import Dispenser
 from bartendro.model.drink import Drink
 from bartendro.model.drink_name import DrinkName
-from bartendro import fsm
-from bartendro.mixer import LL_LOW, LL_OK
+from flask import render_template, redirect
+from sqlalchemy import func, asc
+from sqlalchemy.exc import OperationalError
 
 
 def process_ingredients(drinks):

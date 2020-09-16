@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from bartendro import app, db
 from sqlalchemy import func, asc
-from flask import Flask, request, redirect, render_template
+from flask import render_template
 from flask_login import login_required
 from bartendro.model.drink import Drink, DrinkName
 from bartendro.model.drink_booze import DrinkBooze

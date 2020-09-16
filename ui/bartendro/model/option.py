@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from bartendro import db
-from sqlalchemy.orm import mapper, relationship
-from sqlalchemy import Table, Column, Integer, UnicodeText, Text, Index
+from sqlalchemy import Column, Integer, UnicodeText, Index
 
 
 class Option(db.Model):

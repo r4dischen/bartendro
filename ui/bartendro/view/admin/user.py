@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from bartendro import app, db, login_manager
+from bartendro import app, login_manager
 from bartendro.form.login import LoginForm
-from flask import Flask, request, render_template, flash, redirect, url_for
+from flask import request, render_template, redirect, url_for
 from flask_login import login_required, login_user, logout_user
 
 

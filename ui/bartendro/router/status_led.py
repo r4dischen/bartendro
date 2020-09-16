@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
-import sys
 import logging
-from time import sleep
+import sys
 
 try:
     import RPi.GPIO as gpio

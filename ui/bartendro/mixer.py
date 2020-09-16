@@ -1,27 +1,20 @@
 # -*- coding: utf-8 -*-
-import pdb
 import logging
 import sys
-import traceback
 from time import sleep, time
-from threading import Thread
-from flask import Flask, current_app
-from flask_sqlalchemy import SQLAlchemy
-import memcache
-from sqlalchemy.orm import mapper, relationship, backref
-from sqlalchemy.sql import text
+
 from bartendro import db, app
 from bartendro import fsm
 from bartendro.clean import CleanCycle
-from bartendro.pourcomplete import PourCompleteDelay
-from bartendro.router.hello_drinkbot_driver import MOTOR_DIRECTION_FORWARD
-from bartendro.model.drink import Drink
+from bartendro.error import BartendroBrokenError, BartendroCantPourError, BartendroCurrentSenseError
+from bartendro.global_lock import BartendroLock
 from bartendro.model.booze import BOOZE_TYPE_EXTERNAL
 from bartendro.model.dispenser import Dispenser
 from bartendro.model.drink_log import DrinkLog
 from bartendro.model.shot_log import ShotLog
-from bartendro.global_lock import BartendroLock
-from bartendro.error import BartendroBusyError, BartendroBrokenError, BartendroCantPourError, BartendroCurrentSenseError
+from bartendro.pourcomplete import PourCompleteDelay
+from bartendro.router.hello_drinkbot_driver import MOTOR_DIRECTION_FORWARD
+from sqlalchemy.sql import text
 
 TICKS_PER_ML = 2.78
 CALIBRATE_ML = 60

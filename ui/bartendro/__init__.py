@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
 import os
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
-from flask_sqlalchemy import SQLAlchemy
+
+from flask import Flask, request, render_template
 from flask_login import LoginManager
-from sqlalchemy.orm import mapper, relationship, backref
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import relationship, backref
 
 SQLALCHEMY_DATABASE_FILE = 'bartendro.db'
 SQLALCHEMY_DATABASE_URI = 'sqlite:///../' + SQLALCHEMY_DATABASE_FILE
@@ -39,8 +40,6 @@ from bartendro.model.booze_group_booze import BoozeGroupBooze
 from bartendro.model.dispenser import Dispenser
 from bartendro.model.drink_log import DrinkLog
 from bartendro.model.shot_log import ShotLog
-from bartendro.model.version import DatabaseVersion
-from bartendro.model.option import Option
 
 Drink.name = relationship(DrinkName, backref=backref("drink"))
 
@@ -61,14 +60,6 @@ DrinkLog.drink = relationship(Drink)
 ShotLog.booze = relationship(Booze)
 
 # Import views
-from bartendro.view import root, trending
-from bartendro.view import booze
-from bartendro.view import snooze
-from bartendro.view.admin import booze as booze_admin, drink as drink_admin, \
-    dispenser as admin_dispenser, report, liquidlevel, user, options, debug
-from bartendro.view.drink import drink
-from bartendro.view.ws import booze as ws_booze, dispenser as ws_dispenser, drink as ws_drink, \
-    misc as ws_misc, liquidlevel, option as ws_options
 
 
 @app.before_request

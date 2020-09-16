@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from time import sleep, time
 from threading import Thread
+from time import sleep
 
 
 class PourCompleteDelay(Thread):
@@ -9,5 +9,5 @@ class PourCompleteDelay(Thread):
         self.mixer = mixer
 
     def run(self):
-        sleep(5);
+        sleep(5)
         self.mixer.driver.led_idle()

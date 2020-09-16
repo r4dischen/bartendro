@@ -2,13 +2,12 @@
 import socket
 # import fcntl
 import struct
-import time
-import os
+
 from bartendro import app
-from flask import Flask, request, render_template, Response
-from werkzeug.exceptions import Unauthorized
-from flask_login import login_required
 from bartendro.model.version import DatabaseVersion
+from flask import request, render_template
+from flask_login import login_required
+from werkzeug.exceptions import Unauthorized
 
 
 def get_ip_address_from_interface(ifname):

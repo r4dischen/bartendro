@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-import time
-from bartendro import app, db
-from flask import Flask, request, render_template
+from bartendro import app
+from flask import render_template
 from flask_login import login_required
 
 LOG_LINES_TO_SHOW = 1000

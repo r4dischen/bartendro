@@ -3,7 +3,7 @@ import logging
 from bartendro import app, db
 from bartendro.model.option import Option
 from bartendro.model.shot_log import ShotLog
-from sqlalchemy.exc import OperationalError
+
 
 log = logging.getLogger('bartendro')
 
